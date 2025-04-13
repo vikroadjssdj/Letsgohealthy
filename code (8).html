@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nourish & Flourish | Vibrant Healthy Recipes</title>
+    <style>
+        /* --- Global Styles & Variables --- */
+        :root {
+            --primary-color: #4CAF50; /* Vibrant Green */
+            --secondary-color: #FFC107; /* Sunny Yellow Accent */
+            --light-bg: #f8f9fa;
+            --dark-text: #343a40;
+            --light-text: #f8f9fa;
+            --border-color: #dee2e6;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            --transition-speed: 0.3s;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth; /* Smooth scrolling for anchor links */
+            font-size: 16px; /* Base font size */
+        }
+
+        body {
+            font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.7;
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+
+        /* --- Utility Classes --- */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* --- Header & Navigation --- */
+        .main-header {
+            background: linear-gradient(135deg, var(--primary-color), #66bb6a);
+            color: var(--light-text);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            position: sticky; /* Make nav stick */
+            top: 0;
+            z-index: 1000;
+            transition: padding var(--transition-speed) ease;
+        }
+
+        .main-header h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .main-header p {
+            font-size: 1.1rem;
+            font-weight: 300;
+            opacity: 0.9;
+        }
+
+        .main-nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .main-nav a {
+            color: var(--light-text);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+            position: relative;
+        }
+
+        .main-nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -3px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--secondary-color);
+            transition: width var(--transition-speed) ease;
+        }
+
+        .main-nav a:hover,
+        .main-nav a.active {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+         .main-nav a:hover::after,
+         .main-nav a.active::after {
+            width: 60%;
+         }
+
+        /* Add a subtle shrink effect on scroll */
+        body.scrolled .main-header {
+            padding: 1rem 0;
+        }
+        body.scrolled .main-header h1 {
+            font-size: 2.2rem;
+        }
+         body.scrolled .main-nav ul {
+             margin-top: 1rem;
+         }
+
+
+        /* --- Sections --- */
+        .content-section {
+            padding: 4rem 0;
+            opacity: 0; /* Initially hidden for fade-in effect */
+            transform: translateY(30px); /* Start slightly lower */
+            transition: opacity 0.8s ease-out, transform 0.6s ease-out;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .content-section:last-of-type {
+            border-bottom: none;
+        }
+
+        .content-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .content-section h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 3rem;
+            font-weight: 600;
+            position: relative;
+        }
+
+        /* Underline effect for section titles */
+        .content-section h2::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 3px;
+            background-color: var(--secondary-color);
+            margin: 0.5rem auto 0;
+            border-radius: 2px;
+        }
+
+        /* General paragraph styling within sections */
+        .content-section > .container > p {
+            text-align: center;
+            font-size: 1.1rem;
+            max-width: 750px; /* Slightly wider for general text */
+            margin: 0 auto 1.5rem auto;
+            color: #555;
+        }
+
+
+        /* --- Recipe Grid --- */
+        .recipe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid */
+            gap: 2rem;
+        }
+
+        .recipe-card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .recipe-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .recipe-image {
+            width: 100%;
+            height: 220px; /* Fixed height for images */
+            object-fit: cover; /* Crop images nicely */
+            display: block;
+            transition: transform 0.5s ease;
+        }
+        .recipe-card:hover .recipe-image {
+            transform: scale(1.05); /* Subtle zoom on hover */
+        }
+
+        .recipe-content {
+            padding: 1.5rem;
+            flex-grow: 1; /* Allows content to push footer down */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .recipe-content h3 {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        /* Recipe description text */
+        .recipe-content > p {
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+            color: #666;
+            flex-grow: 1; /* Take up available space before details */
+        }
+
+        /* --- Recipe Meta Info (Time, Difficulty) --- */
+         .recipe-meta {
+            font-size: 0.85rem;
+            color: #777;
+            margin-bottom: 1rem;
+            border-top: 1px dashed var(--border-color);
+            border-bottom: 1px dashed var(--border-color);
+            padding: 0.5rem 0;
+            display: flex;
+            justify-content: space-around; /* Space out items */
+            flex-wrap: wrap; /* Allow wrapping on small screens */
+            gap: 10px;
+        }
+         .recipe-meta span {
+             white-space: nowrap; /* Prevent wrapping within a single item */
+         }
+         .recipe-meta strong {
+             color: var(--dark-text);
+             font-weight: 600;
+         }
+
+        /* --- Recipe Ingredients & Instructions --- */
+        .recipe-details {
+            margin-top: 1rem; /* Reduced margin as meta provides separation */
+        }
+
+        .recipe-details strong { /* Section titles like "Ingredients" */
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--dark-text);
+            font-weight: 600;
+            font-size: 1rem; /* Slightly larger */
+        }
+
+        .recipe-details ul, .recipe-details ol {
+            margin-left: 1.2rem;
+            padding-left: 0.5rem;
+            font-size: 0.9rem;
+            color: #555;
+            margin-bottom: 1rem; /* Space between lists */
+        }
+         .recipe-details ul li {
+             margin-bottom: 0.4rem;
+         }
+         .recipe-details ol li {
+             margin-bottom: 0.6rem;
+             line-height: 1.5;
+         }
+
+        /* --- Healthy Tips Section --- */
+        #tips ul {
+            list-style: none;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        #tips li {
+            background-color: #fff;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+            position: relative;
+            padding-left: 3.5rem; /* Increased padding for emoji */
+            transition: transform var(--transition-speed) ease;
+            line-height: 1.6; /* Improved readability */
+        }
+
+        #tips li:hover {
+            transform: translateX(5px);
+        }
+
+        /* Emoji Icons for Tips */
+        #tips li::before {
+            /* content: '✓'; Original checkmark */
+            position: absolute;
+            left: 1rem;
+            top: 1rem; /* Align with first line of text */
+            /* transform: translateY(-50%); Removed vertical centering */
+            color: var(--primary-color); /* Re-use primary color or keep default */
+            font-weight: normal; /* Emojis have their own weight */
+            font-size: 1.5rem; /* Adjust emoji size */
+            line-height: 1; /* Prevent extra line height from emoji */
+        }
+
+        /* Specific Emojis (can customize per tip) */
+        #tips li:nth-child(1)::before { content: '💧'; } /* Hydration */
+        #tips li:nth-child(2)::before { content: '🧘'; } /* Mindful Eating */
+        #tips li:nth-child(3)::before { content: '🌈'; } /* Color Your Plate */
+        #tips li:nth-child(4)::before { content: '🌱'; } /* Smart Swaps */
+        #tips li:nth-child(5)::before { content: '⏱️'; } /* Prep */
+        #tips li:nth-child(6)::before { content: '❤️'; } /* Listen to Body */
+
+
+        #tips strong {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        /* --- Footer --- */
+        .main-footer {
+            background-color: var(--dark-text);
+            color: var(--light-text);
+            text-align: center;
+            padding: 2.5rem 1rem;
+            margin-top: 3rem;
+        }
+
+        .main-footer p {
+            opacity: 0.8;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem; /* Added spacing */
+        }
+         .main-footer p:last-child {
+             margin-bottom: 0;
+         }
+
+        /* --- Responsive Design --- */
+        @media (max-width: 768px) {
+            html {
+                font-size: 15px;
+            }
+            .main-header h1 { font-size: 2.2rem; }
+            .main-nav ul { flex-direction: column; gap: 0.5rem; }
+            .main-nav a { display: inline-block; }
+            .content-section { padding: 3rem 0; }
+            .content-section h2 { font-size: 2rem; }
+            .recipe-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+            .recipe-image { height: 200px; }
+        }
+
+        @media (max-width: 480px) {
+             html { font-size: 14px; }
+             .container { padding: 0 1rem; }
+             .main-header h1 { font-size: 1.8rem; }
+             .content-section h2 { font-size: 1.8rem; }
+             .recipe-content h3 { font-size: 1.3rem; }
+             #tips li { padding-left: 3rem; } /* Adjust padding for smaller screens */
+             #tips li::before { left: 0.8rem; font-size: 1.3rem; } /* Adjust icon position/size */
+             .recipe-meta { font-size: 0.8rem; justify-content: center; } /* Center meta on small screens */
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="main-header" id="main-header">
+        <div class="container">
+            <h1>Nourish & Flourish</h1>
+            <p>Discover Vibrant, Healthy Recipes for a Happier You</p>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#welcome" class="nav-link active">Welcome</a></li>
+                    <li><a href="#philosophy" class="nav-link">Our Philosophy</a></li>
+                    <li><a href="#recipes" class="nav-link">Recipes</a></li>
+                    <li><a href="#tips" class="nav-link">Healthy Tips</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="welcome" class="content-section">
+            <div class="container">
+                <h2>Welcome to Your Health Journey!</h2>
+                <p>Dive into a world where healthy eating is delicious, simple, and exciting. We believe that nourishing your body with wholesome foods is a key ingredient to a vibrant life. Explore our curated collection of recipes designed to make healthy eating easy and enjoyable.</p>
+                <p>Ready to get started? Pick a recipe below and let's cook up some wellness together!</p>
+            </div>
+        </section>
+
+        <!-- NEW Philosophy Section -->
+        <section id="philosophy" class="content-section">
+             <div class="container">
+                <h2>Our Philosophy: Balance & Joy</h2>
+                <p>We focus on whole, minimally processed ingredients, vibrant flavors, and recipes that fit into real life. Healthy eating isn't about deprivation; it's about finding delicious ways to fuel your body and feel your best. We encourage mindful eating, enjoying your food, and finding a sustainable balance that brings you joy.</p>
+             </div>
+        </section>
+
+        <section id="recipes" class="content-section">
+            <div class="container">
+                <h2>Featured Healthy Recipes</h2>
+                <div class="recipe-grid">
+
+                    <article class="recipe-card">
+                        <img src="https://img.freepik.com/free-photo/salads-with-quinoa-arugula-radish-tomatoes-cucumber-bowl-wooden-table-healthy-food-diet-detox-vegetarian-concept_2829-6842.jpg" alt="Fresh Quinoa & Veggie Salad" class="recipe-image">
+                        <div class="recipe-content">
+                            <h3>Fresh Quinoa & Veggie Salad</h3>
+                            <p>A light yet satisfying salad bursting with fresh flavors and textures. Features protein-rich quinoa, peppery arugula, and crisp garden vegetables.</p>
+                            <!-- ADDED Meta Info -->
+                            <div class="recipe-meta">
+                                <span><strong>Prep:</strong> 15 min</span>
+                                <span><strong>Cook:</strong> 15 min</span>
+                                <span><strong>Difficulty:</strong> Easy</span>
+                            </div>
+                            <div class="recipe-details">
+                                <strong>Ingredients:</strong>
+                                <ul>
+                                    <li>1 cup quinoa, rinsed</li>
+                                    <li>2 cups water or vegetable broth</li>
+                                    <li>2 cups fresh arugula</li>
+                                    <li>1/2 cup sliced radishes</li>
+                                    <li>1 cucumber, diced</li>
+                                    <li>1 cup cherry tomatoes, halved</li>
+                                    <li>Optional: Toasted pumpkin seeds, feta cheese</li>
+                                    <li><strong>Dressing:</strong> 3 tbsp olive oil, 2 tbsp lemon juice, 1 tsp Dijon mustard, salt, pepper</li>
+                                </ul>
+                                <strong>Instructions:</strong>
+                                <ol>
+                                    <li>Cook quinoa: Bring water/broth to a boil, add quinoa, reduce heat, cover, and simmer for 15 minutes or until water is absorbed. Let cool slightly.</li>
+                                    <li>Prepare vegetables: Wash and prepare arugula, slice radishes, dice cucumber, halve tomatoes.</li>
+                                    <li>Whisk together dressing ingredients in a small bowl.</li>
+                                    <li>In a large bowl, combine cooled quinoa, arugula, radishes, cucumber, and tomatoes.</li>
+                                    <li>Pour dressing over salad and toss gently to combine. Add optional seeds or feta if desired. Serve immediately.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="recipe-card">
+                        <img src="https://img.freepik.com/free-photo/slice-fish-cooked-lunch-healthy_1203-4261.jpg" alt="Simple Baked White Fish" class="recipe-image">
+                        <div class="recipe-content">
+                            <h3>Simple Baked White Fish</h3>
+                            <p>Enjoy flaky, tender white fish baked to perfection with minimal fuss. A versatile and healthy protein source for any meal.</p>
+                             <!-- ADDED Meta Info -->
+                             <div class="recipe-meta">
+                                <span><strong>Prep:</strong> 5 min</span>
+                                <span><strong>Cook:</strong> 15 min</span>
+                                <span><strong>Difficulty:</strong> Easy</span>
+                             </div>
+                            <div class="recipe-details">
+                                <strong>Ingredients:</strong>
+                                <ul>
+                                    <li>2 white fish fillets (e.g., cod, tilapia, haddock)</li>
+                                    <li>1 tbsp olive oil</li>
+                                    <li>1/2 lemon (juice + wedges for serving)</li>
+                                    <li>1/2 tsp dried parsley or mixed herbs (optional)</li>
+                                    <li>Salt and freshly ground black pepper to taste</li>
+                                    <li>Optional: Minced garlic clove, paprika</li>
+                                </ul>
+                                <strong>Instructions:</strong>
+                                <ol>
+                                    <li>Preheat oven to 400°F (200°C). Lightly grease a baking dish or line with parchment paper.</li>
+                                    <li>Pat fish fillets dry and place them in the baking dish.</li>
+                                    <li>Drizzle with olive oil and lemon juice.</li>
+                                    <li>Sprinkle with salt, pepper, optional garlic, herbs, or paprika.</li>
+                                    <li>Bake for 10-15 minutes, depending on thickness, or until fish is opaque and flakes easily with a fork.</li>
+                                    <li>Serve immediately with fresh lemon wedges.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="recipe-card">
+                        <img src="https://img.freepik.com/free-photo/tasty-green-smoothie-with-avocado_23-2148858662.jpg?uid=R181620889&ga=GA1.1.84222166.1727564044&semt=ais_hybrid&w=740" alt="Creamy Avocado Green Smoothie" class="recipe-image">
+                        <div class="recipe-content">
+                            <h3>Creamy Avocado Green Smoothie</h3>
+                            <p>Start your day with this incredibly smooth, nutrient-packed green smoothie featuring healthy fats from avocado for lasting energy.</p>
+                             <!-- ADDED Meta Info -->
+                             <div class="recipe-meta">
+                                <span><strong>Prep:</strong> 5 min</span>
+                                <span><strong>Cook:</strong> 0 min</span>
+                                <span><strong>Difficulty:</strong> Easy</span>
+                             </div>
+                            <div class="recipe-details">
+                                <strong>Ingredients:</strong>
+                                <ul>
+                                    <li>1 large handful fresh spinach</li>
+                                    <li>1/2 ripe avocado</li>
+                                    <li>1/2 frozen banana (or 1/2 cup frozen pineapple/mango)</li>
+                                    <li>1 cup unsweetened almond milk or water</li>
+                                    <li>1 tbsp chia seeds or flax seeds (optional)</li>
+                                    <li>Optional: Squeeze of lime juice, few mint leaves</li>
+                                    <li>Optional: 1 tsp maple syrup or 1 pitted date for sweetness</li>
+                                </ul>
+                                <strong>Instructions:</strong>
+                                <ol>
+                                    <li>Combine spinach, avocado, frozen fruit, liquid, seeds (if using), and any other optional ingredients in a high-speed blender.</li>
+                                    <li>Blend on high until completely smooth and creamy. Add a splash more liquid if it's too thick.</li>
+                                    <li>Taste and add sweetener if desired, blending again briefly.</li>
+                                    <li>Pour into a glass and enjoy immediately for best texture and nutrient content.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </article>
+
+                </div> <!-- End Recipe Grid -->
+            </div> <!-- End Container -->
+        </section>
+
+        <section id="tips" class="content-section">
+            <div class="container">
+                <h2>Simple Tips for Healthy Habits</h2>
+                <!-- UPDATED List with Emojis -->
+                <ul>
+                    <li><strong>Hydration Hero:</strong> Carry a reusable water bottle and sip throughout the day. Add lemon or mint for flavor!</li>
+                    <li><strong>Mindful Munching:</strong> Slow down and savor your meals. Pay attention to hunger and fullness cues.</li>
+                    <li><strong>Color Your Plate:</strong> Aim to eat a variety of colorful fruits and vegetables daily for diverse nutrients.</li>
+                    <li><strong>Smart Swaps:</strong> Choose whole grains over refined, bake instead of frying, use herbs for flavor instead of excess salt.</li>
+                    <li><strong>Prep for Success:</strong> Dedicate a little time each week to wash/chop veggies or cook grains for quick weekday meals.</li>
+                    <li><strong>Listen to Your Body:</strong> Don't strive for perfection. Allow for treats in moderation and focus on overall balance.</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <!-- UPDATED Year -->
+            <p>&copy; 2025 Nourish & Flourish. Created with care for your well-being.</p>
+            <p>Eat Well. Live Fully. Be Happy.</p> <!-- Added a bit more encouragement -->
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- Sticky Header Shrink Effect ---
+            const header = document.getElementById('main-header');
+            const scrollThreshold = 50; // Pixels to scroll before shrinking header
+
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > scrollThreshold) {
+                    document.body.classList.add('scrolled');
+                } else {
+                    document.body.classList.remove('scrolled');
+                }
+            });
+
+            // --- Active Navigation Link Highlighting ---
+            // Select all sections that have an ID (targets for navigation)
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            const observerOptionsNav = {
+                root: null, // relative to viewport
+                // Adjust rootMargin slightly to trigger highlight a bit earlier/later if needed
+                rootMargin: '-50px 0px -50% 0px', // Fine-tune: top offset, sides, bottom offset (50% means when bottom half is visible)
+                threshold: 0 // Trigger as soon as any part enters/leaves adjusted rootMargin
+            };
+
+            const navObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                     // Find the corresponding nav link
+                    const link = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
+                    if (link) {
+                        if (entry.isIntersecting) {
+                            // Remove active class from all links first
+                            navLinks.forEach(l => l.classList.remove('active'));
+                            // Add active class to the current link
+                            link.classList.add('active');
+                        }
+                         // Optional: remove active class when not intersecting - handled by the loop above
+                    }
+                });
+                // Fallback: If no section is intersecting strongly, highlight the first visible one.
+                 // This logic can get complex, the current one highlights the *last* one to become intersecting.
+                 // For a robust solution checking scroll position might be needed, but IntersectionObserver is generally good.
+
+            }, observerOptionsNav);
+
+            sections.forEach(section => {
+                navObserver.observe(section);
+            });
+
+            // --- Fade-in Effect for Sections on Scroll ---
+            const sectionsToFade = document.querySelectorAll('.content-section');
+
+            const observerOptionsFade = {
+                root: null,
+                rootMargin: '0px 0px -10% 0px', // Trigger when bottom 10% of screen is reached by the element
+                threshold: 0 // Trigger as soon as it enters the margin
+            };
+
+            const fadeObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        // Optional: Stop observing once visible to save resources
+                        // observer.unobserve(entry.target);
+                    }
+                     // Optional: uncomment below to fade out when scrolling away
+                     // else {
+                     //     entry.target.classList.remove('visible');
+                     // }
+                });
+            }, observerOptionsFade);
+
+            sectionsToFade.forEach(section => {
+                fadeObserver.observe(section);
+            });
+
+        });
+    </script>
+
+</body>
+</html>
